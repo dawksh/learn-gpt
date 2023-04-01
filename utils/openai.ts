@@ -1,12 +1,19 @@
-import axios from 'axios'
+import { Configuration, OpenAIApi } from 'openai';
 
-export const openAIEndpoint = "https://api.openai.com/v1/chat/completions";
+const configuration = new Configuration({
+    organization: "org-R5Rv8SkU9dqLUQOKuFFnN9ts",
+    apiKey: process.env.OPENAI_KEY,
+});
 
-export const chatGPTResponse = async (prompt: string) => {
-    const { data } = await axios.post(openAIEndpoint, {
+const openai = new OpenAIApi(configuration);
+
+export const chatResponse = async (prompt: string) => {
+    const response = await openai.createChatCompletion({
+        messages: [{ "role": "user", "content": prompt }],
         model: "gpt-3.5-turbo",
-        message: [{ "role": "user", "content": prompt }]
+        temperature: 0.7
     })
 
-    return data;
+    return response.data.choices[0].message?.content
+
 }
