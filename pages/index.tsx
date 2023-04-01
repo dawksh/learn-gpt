@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text } from "@chakra-ui/react";
 import axios from 'axios'
 
 interface Response {
@@ -30,25 +30,23 @@ export default function Home() {
         <Heading as="h1" size="xl" mb={4}>
           Learn GPT
         </Heading>
-        <FormControl>
-          <FormLabel htmlFor="name">What do you want to study today?</FormLabel>
-          <Input
-            id="name"
-            placeholder="Enter a topic"
-            value={inputValue}
-            onChange={handleInputChange}
-            mb={4}
-          />
-          <Button type="submit" onClick={handleSubmit} isLoading={loading}>
-            Submit
-          </Button>
-        </FormControl>
+        <FormLabel htmlFor="name">What do you want to study today?</FormLabel>
+        <Input
+          id="name"
+          placeholder="Enter a topic"
+          value={inputValue}
+          onChange={handleInputChange}
+          mb={4}
+        />
+        <Button type="submit" onClick={handleSubmit} isLoading={loading}>
+          Submit
+        </Button>
         {
           response && (
             <>
-              {response.text && <p>{response.text}</p>}
+              {response.text && <Text p={4} >{response.text}</Text>}
               <br />
-              {response.image && response.image.map((image, index) => <img key={index} src={image} />)}
+              {response.image && response.image.map((image, index) => <img height="300px" width="300px" key={index} src={image} />)}
             </>
           )
         }
