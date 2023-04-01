@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import axios from "axios";
 import { useEffect, useState } from 'react';
+import { chatResponse } from '../utils/openai';
 
 
 interface Questions {
@@ -25,8 +26,8 @@ export default function QuizModal({ isOpen, onClose, topic }: { isOpen: boolean,
     const [reveal, setReveal] = useState<boolean[]>([false, false, false, false, false])
 
     const fetchQuiz = async () => {
-        const { data } = await axios.post('/api/quiz', { prompt: topic })
-        setQuestions(data.questions)
+        const textData: any = await chatResponse(`generate 5 basic question answers on ${prompt} in JSON format with an array of question and answer objects.`)
+        setQuestions(JSON.parse(textData).questions)
     }
 
     useEffect(() => {

@@ -25,7 +25,7 @@ export default function Home() {
 
 
   const generateData = async () => {
-    const textData = await chatResponse(`explain ${prompt} like I'm 10 in 300 words`)
+    const textData = await chatResponse(`explain ${inputValue} like I'm 10 in 300 words`)
 
     // const output = await replicate.run(
     //   "stability-ai/stable-diffusion:db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf",
