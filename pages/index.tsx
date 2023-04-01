@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text, Image, useDisclosure } from "@chakra-ui/react";
 import axios from 'axios'
 import QuizModal from "../components/Quiz.modal";
+import { chatResponse } from "../utils/openai";
+import replicate from "../utils/replicate";
 
 interface Response {
   image: [string],
@@ -21,11 +23,33 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [questions, setQuestions] = useState<Array<Questions> | null>(null)
 
+
+  const generateData = async () => {
+    const textData = await chatResponse(`explain ${prompt} like I'm 10 in 300 words`)
+
+    // const output = await replicate.run(
+    //   "stability-ai/stable-diffusion:db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf",
+    //   {
+    //     input: {
+    //       prompt: `generate an image to explain ${prompt} like I'm 10`,
+    //       num_outputs: 1,
+    //       guidance_scale: 7.5,
+    //       scheduler: "K_EULER",
+    //       num_inference_steps: 50,
+    //       image_dimensions: "768x768"
+    //     }
+    //   }
+    // );
+    setResponse({
+      image: ["https://i.imgur.com/4ZQ9Z0M.png"],
+      text: textData as string
+    })
+  }
+
   const handleSubmit = async () => {
     setTopic(inputValue)
     setLoading(true)
-    const { data } = await axios.post('/api/learn', { prompt: inputValue })
-    setResponse(data)
+    await generateData()
     setLoading(false)
   }
   const handleInputChange = (e: any) => {
