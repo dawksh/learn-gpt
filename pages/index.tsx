@@ -24,7 +24,7 @@ export default function Home() {
   const [questions, setQuestions] = useState<Array<Questions> | null>(null)
 
   const fetchQuiz = async () => {
-    const textData: any = await chatResponse(`generate 5 basic question answers on ${topic} in JSON format with an array of question and answer objects.`)
+    const textData: any = await chatResponse(`generate 5 basic question answers on ${inputValue} in JSON format with an array of question and answer objects.`)
     console.log(JSON.parse(textData).questions)
     setQuestions(JSON.parse(textData).questions)
   }
@@ -75,7 +75,7 @@ export default function Home() {
             <>
               {response.text && <Text p={4} >{response.text}</Text>}
               <br />
-              <Button m={4} rounded="none" isDisabled={questions?.length == 0} variant="outline" border="4px" onClick={onOpen}>
+              <Button m={4} rounded="none" isDisabled={typeof questions == "undefined"} variant="outline" border="4px" onClick={onOpen}>
                 Take a quiz!
               </Button>
             </>
