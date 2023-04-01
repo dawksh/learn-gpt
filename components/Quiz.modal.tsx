@@ -18,19 +18,22 @@ interface Questions {
     answer: string
 }
 
-export default function QuizModal({ isOpen, onClose, topic }: { isOpen: boolean, onClose: () => void, topic: string }) {
+export default function QuizModal({ isOpen, onClose, topic }: { isOpen: boolean, onClose: () => void, topic: string | null }) {
 
     const [questions, setQuestions] = useState<Array<Questions> | null>(null)
+    const [index, setIndex] = useState<number>(0)
+    const [reveal, setReveal] = useState<boolean[]>([false, false, false, false, false])
 
     const fetchQuiz = async () => {
         const { data } = await axios.post('/api/quiz', { prompt: topic })
         setQuestions(data.questions)
     }
+
     useEffect(() => {
         if (topic) {
             fetchQuiz()
         }
-    }, [])
+    }, [topic])
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -38,19 +41,28 @@ export default function QuizModal({ isOpen, onClose, topic }: { isOpen: boolean,
                 <ModalHeader>Quiz</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {questions && questions.map((question: Questions, index: number) => {
-                        return (
-                            <div key={index}>
-                                <b>{question.question}</b>
-                                <p>{question.answer}</p>
-                            </div>
-                        )
-                    })}
+                    {index} / 5
+                    {questions && (
+                        <div key={index}>
+                            <b>{questions[index].question}</b>
+                            {reveal[index] ? (<p>{questions[index].answer}</p>) : (<Button m={4} rounded="none" variant="outline" border="4px" onClick={() => {
+                                const arr = reveal;
+                                arr[index] = !arr[index];
+                                setReveal(arr)
+                            }}>Reveal answer</Button>)}
+                        </div>
+                    )}
+
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
+                    <Button colorScheme='blue' border="4px" rounded="none" variant="solid" disabled={true} onClick={() => {
+                        setIndex(index - 1)
+                    }}>
+                        &lt;
+                    </Button>
+                    <Button colorScheme='blue' border="4px" rounded="none" variant="solid" disabled={index == 4} onClick={() => setIndex(index + 1)}>
+                        &gt;
                     </Button>
                 </ModalFooter>
             </ModalContent>
