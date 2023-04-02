@@ -77,7 +77,7 @@ export default function Home() {
           border="2px"
         />
         <Button rounded="none" variant="outline" border="4px" type="submit" onClick={handleSubmit} isLoading={loading}>
-          Submit
+          Learn
         </Button>
         {loading && (<>
           {/* @ts-ignore */}
