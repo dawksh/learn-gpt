@@ -3,7 +3,7 @@ import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text, Image,
 import axios from 'axios'
 import QuizModal from "../components/Quiz.modal";
 import { chatResponse } from "../utils/openai";
-import replicate from "../utils/replicate";
+import Head from 'next/head'
 
 interface Response {
   image: [string],
@@ -52,6 +52,9 @@ export default function Home() {
 
   return (
     <Box p={8}>
+      <Head>
+        <title>Learn GPT</title>
+      </Head>
       <Flex justifyContent="center" alignItems="center" direction='column'>
         <Heading as="h1" size="xl" mb={4}>
           Learn GPT
