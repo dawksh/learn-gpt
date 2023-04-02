@@ -17,7 +17,7 @@ export default async function handler(
           guidance_scale: 7.5,
           scheduler: "K_EULER",
           num_inference_steps: 50,
-          image_dimensions: "400x400"
+          image_dimensions: "512x512"
         }
       }
     );
