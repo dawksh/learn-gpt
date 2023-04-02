@@ -79,6 +79,9 @@ export default function Home() {
         <Button rounded="none" variant="outline" border="4px" type="submit" onClick={handleSubmit} isLoading={loading}>
           Submit
         </Button>
+        {loading && (<>
+          <marquee>good things take time</marquee>
+        </>)}
         {
           response && (
             <>
