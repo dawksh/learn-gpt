@@ -80,6 +80,7 @@ export default function Home() {
           Submit
         </Button>
         {loading && (<>
+          {/* @ts-ignore */}
           <marquee>good things take time</marquee>
         </>)}
         {
