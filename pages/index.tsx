@@ -4,6 +4,7 @@ import axios from 'axios'
 import QuizModal from "../components/Quiz.modal";
 import { chatResponse } from "../utils/openai";
 import Head from 'next/head'
+import replicate from "../utils/replicate";
 
 interface Response {
   image: [string],
@@ -31,8 +32,13 @@ export default function Home() {
 
   const generateData = async () => {
     const textData: any = await chatResponse(`explain ${inputValue} like I'm 10 in 300 words`)
+
+    const { data } = await axios.post("/api/learn", {
+      prompt: inputValue
+    })
+
     setResponse({
-      image: ["https://i.imgur.com/4ZQ9Z0M.png"],
+      image: data.image,
       text: textData as string
     })
   }
@@ -78,6 +84,7 @@ export default function Home() {
             <>
               {response.text && <Text p={4} >{response.text}</Text>}
               <br />
+              {response.image && <Image src={response.image[0]} alt="Image" width="300px" height="300px" />}
               <Button m={4} rounded="none" isDisabled={typeof questions == "undefined"} variant="outline" border="4px" onClick={onOpen}>
                 Take a quiz!
               </Button>
