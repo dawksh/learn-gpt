@@ -6,7 +6,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure,
+    Text,
     Button,
 } from '@chakra-ui/react'
 import axios from "axios";
@@ -22,7 +22,7 @@ interface Questions {
 export default function QuizModal({ isOpen, onClose, questions }: { isOpen: boolean, onClose: () => void, topic: string | null, questions: Array<Questions> | null }) {
 
     const [index, setIndex] = useState<number>(0)
-    const [reveal, setReveal] = useState<boolean[]>([false, false, false, false, false])
+    const [reveal, setReveal] = useState<boolean>(false)
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -31,15 +31,13 @@ export default function QuizModal({ isOpen, onClose, questions }: { isOpen: bool
                 <ModalHeader>Quiz</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {index + 1} / 5
+                    <Text fontWeight="bold">Q.{index + 1} / Q.5</Text>
                     {questions && (
                         <div key={index}>
                             <b>{questions[index].question}</b>
                             <br />
-                            {reveal[index] ? (<p>{questions[index].answer}</p>) : (<Button m={4} rounded="none" variant="outline" border="4px" onClick={() => {
-                                const arr = reveal
-                                arr.splice(index, 1, !arr[index])
-                                setReveal(arr)
+                            {reveal ? (<p><br />{questions[index].answer}</p>) : (<Button mt={4} rounded="none" variant="outline" border="4px" onClick={() => {
+                                setReveal(true)
                             }}>Reveal answer</Button>)}
                         </div>
                     )}
@@ -49,10 +47,14 @@ export default function QuizModal({ isOpen, onClose, questions }: { isOpen: bool
                 <ModalFooter>
                     <Button colorScheme='blue' border="4px" rounded="none" variant="solid" isDisabled={index == 0} onClick={() => {
                         setIndex(index - 1)
+                        setReveal(false)
                     }}>
                         &lt;
                     </Button>
-                    <Button colorScheme='blue' border="4px" rounded="none" variant="solid" isDisabled={index == 4} onClick={() => setIndex(index + 1)}>
+                    <Button colorScheme='blue' border="4px" rounded="none" variant="solid" isDisabled={index == 4} onClick={() => {
+                        setIndex(index + 1)
+                        setReveal(false)
+                    }}>
                         &gt;
                     </Button>
                 </ModalFooter>
