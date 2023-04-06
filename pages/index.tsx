@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text, Image, useDisclosure } from "@chakra-ui/react";
+import { useState } from "react";
+import { Box, Button, Flex, Heading, Input, Text, Image, useDisclosure } from "@chakra-ui/react";
 import axios from 'axios'
 import QuizModal from "../components/Quiz.modal";
 import { chatResponse } from "../utils/openai";
@@ -50,11 +50,12 @@ export default function Home() {
 
   const handleSubmit = async () => {
     setResponse(null)
+    setSuggestions(null)
     setTopic(inputValue)
     setLoading(true)
     await fetchQuiz()
-    await generateData()
     await generateSuggestions()
+    await generateData()
     setLoading(false)
   }
   const handleInputChange = (e: any) => {
@@ -109,7 +110,9 @@ export default function Home() {
         {
           suggestions && (<Box p={4} m={4}>
             <Text fontWeight="bold" my="2">Deep Dive into the topic with a few resources below:</Text>
-            <pre>{suggestions}</pre>
+            <Text mx={8}>
+              <pre>{suggestions}</pre>
+            </Text>
           </Box>)
         }
       </Flex>
