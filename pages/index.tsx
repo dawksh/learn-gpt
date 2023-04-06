@@ -108,7 +108,7 @@ export default function Home() {
           )
         }
         {
-          suggestions && (<Box p={4} m={4}>
+          suggestions && response && (<Box p={4} m={4}>
             <Text fontWeight="bold" my="2">Deep Dive into the topic with a few resources below:</Text>
             <Text mx={8}>
               <pre>{suggestions}</pre>
