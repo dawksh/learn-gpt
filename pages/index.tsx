@@ -4,7 +4,6 @@ import axios from 'axios'
 import QuizModal from "../components/Quiz.modal";
 import { chatResponse } from "../utils/openai";
 import Head from 'next/head'
-import replicate from "../utils/replicate";
 
 interface Response {
   image: [string],
@@ -23,11 +22,17 @@ export default function Home() {
   const [response, setResponse] = useState<Response | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [questions, setQuestions] = useState<Array<Questions> | null>(null)
+  const [suggestions, setSuggestions] = useState<string | null>(null)
 
   const fetchQuiz = async () => {
     const textData: any = await chatResponse(`generate 5 basic question answers on ${inputValue} in JSON format with an array of question and answer objects.`)
     console.log(JSON.parse(textData).questions)
     setQuestions(JSON.parse(textData).questions)
+  }
+
+  const generateSuggestions = async () => {
+    const textData: any = await chatResponse(`suggest me resources to learn more about ${inputValue}`)
+    setSuggestions(textData)
   }
 
   const generateData = async () => {
@@ -44,10 +49,12 @@ export default function Home() {
   }
 
   const handleSubmit = async () => {
+    setResponse(null)
     setTopic(inputValue)
     setLoading(true)
     await fetchQuiz()
     await generateData()
+    await generateSuggestions()
     setLoading(false)
   }
   const handleInputChange = (e: any) => {
@@ -65,14 +72,14 @@ export default function Home() {
         <Heading as="h1" size="xl" mb={4}>
           Learn GPT
         </Heading>
+        <Image src="/einstein.png" width="300px" height="300px" rounded="md"></Image>
         <QuizModal isOpen={isOpen} onClose={onClose} topic={topic} questions={questions} />
-        <FormLabel htmlFor="name">What do you want to study today?</FormLabel>
         <Input
           id="name"
-          placeholder="Enter a topic"
+          placeholder="What'd you like to learn today?"
           value={inputValue}
           onChange={handleInputChange}
-          mb={4}
+          my={4}
           rounded="none"
           border="2px"
         />
@@ -82,7 +89,10 @@ export default function Home() {
         {loading && (<>
           <br />
           {/* @ts-ignore */}
-          <marquee>good things take time</marquee>
+          <marquee>good things take time &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Curating the best learning content for you
+            &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Learn GPT lets you learn, take a quiz, and equip you to go down the rabbit hole to learn more!
+            {/* @ts-ignore */}
+          </marquee>
         </>)}
         {
           response && (
@@ -95,6 +105,12 @@ export default function Home() {
               </Button>
             </>
           )
+        }
+        {
+          suggestions && (<Box p={4} m={4}>
+            <Text fontWeight="bold" my="2">Deep Dive into the topic with a few resources below:</Text>
+            <pre>{suggestions}</pre>
+          </Box>)
         }
       </Flex>
 
