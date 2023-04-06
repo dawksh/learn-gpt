@@ -46,7 +46,7 @@ export default function Home() {
   const handleSubmit = async () => {
     setTopic(inputValue)
     setLoading(true)
-    fetchQuiz()
+    await fetchQuiz()
     await generateData()
     setLoading(false)
   }
@@ -80,6 +80,7 @@ export default function Home() {
           Learn
         </Button>
         {loading && (<>
+          <br />
           {/* @ts-ignore */}
           <marquee>good things take time</marquee>
         </>)}
